@@ -1,0 +1,8 @@
+.hide-text 	{
+  background: #000 !important;
+  color: #000 !important
+}
+
+.hide-text:hover {  
+color: #FFF !important
+}

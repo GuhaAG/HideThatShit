@@ -11,7 +11,7 @@ function getCurrentTabUrl(callback) {
   };
 
   chrome.tabs.query(queryInfo, (tabs) => {
-    
+
     var tab = tabs[0];
     var url = tab.url;
 
@@ -25,15 +25,23 @@ function getCurrentTabUrl(callback) {
 /**
  * Hide all occurences of keyword from content
  *
- * @param {string} work The keyword to hide content
+ * @param {string} word The keyword to hide content
  */
 function hideContent(word) {
-  document.body.style.background = "red";
-  //var script = 'alert("hide all ' + work + '");';
-  
-  //chrome.tabs.executeScript({
-    //code: script
-  //});
+
+  var script = "$(\"a[href^=\'http\']\").each(function(index) {"
+                  +"var urlText = $(this).attr(\"href\");"
+                  +"if(urlText.toLowerCase().indexOf(\""+word+"\") >= 0 ){"
+                      +"$(this).addClass(\"hide-text\");"                      
+                  +"}"
+                +"});";
+
+  //var script = "var firstHref = $(\"a[href^=\'http\']\").eq(0).attr(\"href\");";
+  //script+= "console.log(firstHref);";
+
+  chrome.tabs.executeScript({
+    code: script
+  });
 }
 
 /**
@@ -58,7 +66,7 @@ function getSavedHideKeyword(url, callback) {
 function saveHideKeyword(url, word) {
   var items = {};
   items[url] = word;
-  
+
   chrome.storage.sync.set(items);
 }
 
